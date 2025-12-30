@@ -103,13 +103,19 @@ const plugin: Plugin<PluginOptions> = (editor, options = {}) => {
 
     let mjElement = findType(el);
     if (rte && mjElement == 'mj-button') {
-      rte.config.removePlugins = "scayt,exportpdf,link";
+      rte.config.removePlugins = "scayt,exportpdf,link,lineheight,pastefromword,pastetools,pastefromgdocs,pastefromlibreoffice,format,stylescombo,font";
     } else if (rte && mjElement == 'mj-navbar-link') {
-        // Emoji rompe el enlace al añadir un emoticono
-        // Link crea un enlace dentro de un enlace
-        rte.config.removePlugins = "scayt,exportpdf,link,emoji";
+      // Emoji rompe el enlace al añadir un emoticono
+      // Link crea un enlace dentro de un enlace
+      rte.config.removePlugins = "scayt,exportpdf,link,emoji,justify,lineheight,pastefromword,pastetools,pastefromgdocs,pastefromlibreoffice,format,stylescombo,font";
     } else if (rte && mjElement !== 'mj-button') {
       rte.config.removePlugins = "scayt,exportpdf";
+    }
+
+    if (rte && (mjElement === 'mj-button' || mjElement === 'mj-navbar-link')) {
+      rte.config.toolbar = [
+        [ 'Bold', 'Italic', 'Underline', 'RemoveFormat', 'Strike', '-', 'TextColor', 'BGColor' ]
+      ];
     }
 
     rte?.focus();
@@ -174,7 +180,7 @@ const plugin: Plugin<PluginOptions> = (editor, options = {}) => {
       // Init CKEDITOR
       rte = ck!.inline(el, ckOptions);
 
-      // Make click event propogate
+      // Make click event propagate
       rte.on('contentDom', () => {
         const editable = rte!.editable();
         editable.attachListener(editable, 'click', () => el.click());
